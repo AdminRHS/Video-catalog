@@ -33,6 +33,7 @@
             --marketers-color: #EC4899;
             --developers-color: #147857;
             --videographers-color: #F97316;
+            --general-color: #4299e1; /* Primary Blue from Design System */
             --all-color: #4B5563; /* Gray */
         }
 
@@ -41,6 +42,10 @@
         /* All */
         .filter-btn.filter-all.active { color: var(--all-color); background-color: rgba(75, 85, 99, 0.15); border-color: var(--all-color); }
         .dark .filter-btn.filter-all.active { color: #D1D5DB; border-color: #D1D5DB;}
+
+        /* General */
+        .filter-btn.filter-general.active, .tag-general { color: var(--general-color); background-color: rgba(66, 153, 225, 0.15); border-color: var(--general-color); }
+        .dark .filter-btn.filter-general.active, .dark .tag-general { color: #63b3ed; border-color: #63b3ed; }
 
         /* Designers */
         .filter-btn.filter-designers.active, .tag-designers { color: var(--designers-color); background-color: rgba(109, 40, 217, 0.15); border-color: var(--designers-color); }
@@ -61,45 +66,225 @@
         /* Videographers */
         .filter-btn.filter-videographers.active, .tag-videographers { color: var(--videographers-color); background-color: rgba(249, 115, 22, 0.15); border-color: var(--videographers-color); }
         .dark .filter-btn.filter-videographers.active, .dark .tag-videographers { color: #FB923C; border-color: #FB923C; }
+        
+        /* NEW Voice Wave Animation */
+        .voice-wave {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .voice-wave span {
+            width: 4px;
+            height: 100%;
+            background-color: #63b3ed;
+            border-radius: 4px;
+            transform-origin: bottom;
+            animation: fluid-wave 1.5s infinite ease-in-out;
+        }
+
+        @keyframes fluid-wave {
+            0%, 100% { transform: scaleY(0.1); }
+            50% { transform: scaleY(1); }
+        }
+        
+        /* Staggered animation delays for a flowing effect */
+        .voice-wave span:nth-child(15n + 1) { animation-delay: 0s; }
+        .voice-wave span:nth-child(15n + 2) { animation-delay: -1.4s; }
+        .voice-wave span:nth-child(15n + 3) { animation-delay: -1.3s; }
+        .voice-wave span:nth-child(15n + 4) { animation-delay: -1.2s; }
+        .voice-wave span:nth-child(15n + 5) { animation-delay: -1.1s; }
+        .voice-wave span:nth-child(15n + 6) { animation-delay: -1.0s; }
+        .voice-wave span:nth-child(15n + 7) { animation-delay: -0.9s; }
+        .voice-wave span:nth-child(15n + 8) { animation-delay: -0.8s; }
+        .voice-wave span:nth-child(15n + 9) { animation-delay: -0.7s; }
+        .voice-wave span:nth-child(15n + 10) { animation-delay: -0.6s; }
+        .voice-wave span:nth-child(15n + 11) { animation-delay: -0.5s; }
+        .voice-wave span:nth-child(15n + 12) { animation-delay: -0.4s; }
+        .voice-wave span:nth-child(15n + 13) { animation-delay: -0.3s; }
+        .voice-wave span:nth-child(15n + 14) { animation-delay: -0.2s; }
+        .voice-wave span:nth-child(15n + 15) { animation-delay: -0.1s; }
+
+        /* Sidebar specific styles */
+        #sidebar {
+            transition: width 300ms ease-in-out;
+        }
+        #main-content {
+            transition: margin-left 300ms ease-in-out;
+        }
+        #sidebar.collapsed {
+            width: 5rem; /* 80px */
+        }
+        #sidebar.collapsed .sidebar-label,
+        #sidebar.collapsed .user-details,
+        #sidebar.collapsed #logo-text {
+            opacity: 0;
+            visibility: hidden;
+            width: 0;
+            transition: opacity 150ms ease-in-out, visibility 150ms ease-in-out, width 150ms ease-in-out;
+        }
+         #sidebar:not(.collapsed) #logo-text,
+         #sidebar:not(.collapsed) .sidebar-label,
+         #sidebar:not(.collapsed) .user-details {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 150ms 150ms ease-in-out;
+         }
+        #sidebar.collapsed .nav-item,
+        #sidebar.collapsed .sidebar-footer-item {
+            justify-content: center;
+        }
+        #sidebar.collapsed .user-profile {
+            padding: 0;
+            justify-content: center;
+        }
     </style>
 </head>
 <body class="text-[#2d3748] dark:text-[#f7fafc]">
 
     <div class="flex min-h-screen">
-        <aside class="w-64 bg-[#1f2937] shadow-md flex flex-col p-4 fixed h-full z-20">
-            <div class="text-2xl font-bold text-[#63b3ed] mb-8">
-                <i data-lucide="graduation-cap" class="inline-block"></i> Game Academy
+        <aside id="sidebar" class="w-64 bg-[#1f2937] shadow-lg flex flex-col fixed h-full z-40">
+            <div class="flex items-center justify-between h-16 px-4 flex-shrink-0 border-b border-gray-700/50">
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <i data-lucide="sparkles" class="text-white flex-shrink-0"></i>
+                    <span id="logo-text" class="text-white font-bold text-lg whitespace-nowrap">Game Academy</span>
+                </div>
+                <button id="sidebar-toggle" class="text-gray-400 hover:text-white">
+                    <i data-lucide="chevron-left"></i>
+                </button>
             </div>
-            <nav class="flex-grow space-y-2">
-                <a href="#" class="flex items-center p-2 text-[#cbd5e0] hover:bg-[#63b3ed]/10 hover:text-[#63b3ed] rounded-lg">
-                    <i data-lucide="home" class="w-5 h-5 mr-3"></i> Home
+
+            <nav class="flex-grow p-2 space-y-1 overflow-y-auto">
+                <a href="#" class="nav-item flex items-center p-3 text-gray-300 rounded-lg hover:bg-gray-700/50">
+                    <i data-lucide="home" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label ml-4 font-semibold whitespace-nowrap">Home</span>
                 </a>
-                <a href="#" class="flex items-center p-2 bg-[#63b3ed]/10 text-[#63b3ed] font-semibold rounded-lg">
-                    <i data-lucide="book-open" class="w-5 h-5 mr-3"></i> Courses
+                <a href="#" class="nav-item flex items-center p-3 text-gray-300 hover:bg-gray-700/50 rounded-lg">
+                    <i data-lucide="graduation-cap" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label ml-4 whitespace-nowrap">Courses</span>
                 </a>
-                 <a href="#" class="flex items-center p-2 text-[#cbd5e0] hover:bg-[#63b3ed]/10 hover:text-[#63b3ed] rounded-lg">
-                    <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3"></i> Leaderboard
+                <a href="#" class="nav-item flex items-center p-3 text-white bg-gray-700 rounded-lg font-semibold">
+                    <i data-lucide="play-circle" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label ml-4 whitespace-nowrap">Video Catalog</span>
                 </a>
-                <a href="#" class="flex items-center p-2 text-[#cbd5e0] hover:bg-[#63b3ed]/10 hover:text-[#63b3ed] rounded-lg">
-                    <i data-lucide="bookmark" class="w-5 h-5 mr-3"></i> Bookmarks
+                <a href="#" class="nav-item flex items-center p-3 text-gray-300 hover:bg-gray-700/50 rounded-lg">
+                    <i data-lucide="route" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label ml-4 whitespace-nowrap">Learning Paths</span>
+                </a>
+                <a href="#" class="nav-item flex items-center p-3 text-gray-300 hover:bg-gray-700/50 rounded-lg">
+                    <i data-lucide="message-square" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label ml-4 whitespace-nowrap">Forum</span>
+                </a>
+                <a href="#" class="nav-item flex items-center p-3 text-gray-300 hover:bg-gray-700/50 rounded-lg">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label ml-4 whitespace-nowrap">Leaderboard</span>
+                </a>
+                <a href="#" class="nav-item flex items-center p-3 text-gray-300 hover:bg-gray-700/50 rounded-lg">
+                    <i data-lucide="help-circle" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label ml-4 whitespace-nowrap">My Tests</span>
+                </a>
+                <a href="#" class="nav-item flex items-center p-3 text-gray-300 hover:bg-gray-700/50 rounded-lg">
+                    <i data-lucide="bookmark" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label ml-4 whitespace-nowrap">Bookmarks</span>
+                </a>
+                 <a href="#" class="nav-item flex items-center p-3 text-gray-300 hover:bg-gray-700/50 rounded-lg">
+                    <i data-lucide="layout-grid" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label ml-4 whitespace-nowrap">Analytics</span>
+                </a>
+                 <a href="#" class="nav-item flex items-center p-3 text-gray-300 hover:bg-gray-700/50 rounded-lg">
+                    <i data-lucide="library" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label ml-4 whitespace-nowrap">Lessons Library</span>
+                </a>
+                 <a href="#" class="nav-item flex items-center p-3 text-gray-300 hover:bg-gray-700/50 rounded-lg">
+                    <i data-lucide="package" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label ml-4 whitespace-nowrap">Modules</span>
+                </a>
+                 <a href="#" class="nav-item flex items-center p-3 text-gray-300 hover:bg-gray-700/50 rounded-lg">
+                    <i data-lucide="file-check-2" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label ml-4 whitespace-nowrap">My Change Requests</span>
                 </a>
             </nav>
-            <div class="mt-auto">
-                <button id="theme-toggle" class="w-full flex items-center justify-center p-3 text-[#cbd5e0] border border-[#424242] rounded-lg hover:bg-[#2d3748]">
-                    <i data-lucide="moon" class="w-5 h-5 mr-2 hidden dark:inline-block"></i>
-                    <i data-lucide="sun" class="w-5 h-5 mr-2 inline-block dark:hidden"></i>
-                    <span class="dark:hidden">Dark Mode</span>
-                    <span class="hidden dark:inline-block">Light Mode</span>
+            
+            <div class="p-4 flex-shrink-0 border-t border-gray-700/50 space-y-2">
+                <button id="theme-toggle" class="sidebar-footer-item flex w-full items-center p-3 text-gray-300 hover:bg-gray-700/50 rounded-lg">
+                    <i id="theme-icon" data-lucide="sun" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label ml-4 whitespace-nowrap">Light Mode</span>
                 </button>
+                <div class="user-profile flex items-center p-2 rounded-lg">
+                    <div class="relative flex-shrink-0">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center font-bold text-white">ЮЧ</div>
+                    </div>
+                    <div class="user-details ml-3 overflow-hidden">
+                        <p class="text-sm font-semibold text-white whitespace-nowrap">Юлія Чоботар</p>
+                        <p class="text-xs text-gray-400 whitespace-nowrap">Role: user, student</p>
+                    </div>
+                     <div class="user-details ml-auto relative flex-shrink-0">
+                        <i data-lucide="bell" class="text-gray-400"></i>
+                        <span class="absolute -top-1 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white">99+</span>
+                    </div>
+                </div>
+                 <a href="#" class="sidebar-footer-item flex w-full items-center p-3 text-gray-300 hover:bg-gray-700/50 rounded-lg">
+                    <i data-lucide="log-out" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="sidebar-label ml-4 whitespace-nowrap">Logout</span>
+                </a>
             </div>
         </aside>
 
-        <main class="ml-64 flex-1 bg-[#f7fafc] dark:bg-[#1a202c] p-6 lg:p-8">
+        <main id="main-content" class="ml-64 flex-1 bg-[#f7fafc] dark:bg-[#1a202c] p-6 lg:p-8">
             <div class="max-w-7xl mx-auto">
                 
+                <header class="flex justify-between items-center mb-6">
+                    <nav aria-label="Breadcrumb">
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="font-semibold text-gray-900 dark:text-gray-100">Video Catalog</span>
+                        </div>
+                    </nav>
+                    <div class="flex items-center gap-4">
+                        <button class="inline-flex items-center gap-2 px-4 py-2 bg-[#4299e1] text-white rounded-lg font-semibold transition-all hover:bg-[#3182ce]">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span>Create</span>
+                        </button>
+                        <div id="notifications-btn-container" class="relative">
+                            <button id="notifications-btn" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200/50 dark:bg-gray-700/50 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                                <i data-lucide="bell" class="w-5 h-5 text-gray-600 dark:text-gray-300"></i>
+                            </button>
+                            <div id="notifications-panel" class="absolute right-0 mt-2 w-[25rem] bg-white dark:bg-[#1f2937] border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg hidden z-30">
+                                <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                                    <h3 class="font-semibold text-gray-800 dark:text-gray-200">Notifications</h3>
+                                </div>
+                                <div class="py-2 max-h-96 overflow-y-auto">
+                                    <a href="#" class="flex items-start gap-4 p-4 hover:bg-gray-100 dark:hover:bg-gray-800">
+                                        <img src="Mastering_Notebook_LM.jpg" class="w-24 h-16 object-cover rounded-md flex-shrink-0" alt="Video thumbnail">
+                                        <div class="flex-1">
+                                            <p class="font-semibold text-sm leading-tight text-gray-800 dark:text-gray-200">New Video: Mastering Notebook LM</p>
+                                            <div class="mt-1"><span class="tag tag-designers px-2 py-0.5 text-xs rounded-md">#Design</span></div>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="flex items-start gap-4 p-4 hover:bg-gray-100 dark:hover:bg-gray-800">
+                                        <img src="VS_Code_Launchpad.jpg" class="w-24 h-16 object-cover rounded-md flex-shrink-0" alt="Video thumbnail">
+                                        <div class="flex-1">
+                                            <p class="font-semibold text-sm leading-tight text-gray-800 dark:text-gray-200">New Video: VS Code Launchpad</p>
+                                            <div class="mt-1"><span class="tag tag-developers px-2 py-0.5 text-xs rounded-md">#Development</span></div>
+                                        </div>
+                                    </a>
+                                     <a href="#" class="flex items-start gap-4 p-4 hover:bg-gray-100 dark:hover:bg-gray-800">
+                                        <img src="CRM_Onboarding.jpg" class="w-24 h-16 object-cover rounded-md flex-shrink-0" alt="Video thumbnail">
+                                        <div class="flex-1">
+                                            <p class="font-semibold text-sm leading-tight text-gray-800 dark:text-gray-200">New Video: CRM Onboarding Guide</p>
+                                            <div class="mt-1"><span class="tag tag-managers px-2 py-0.5 text-xs rounded-md">#Management</span></div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
                 <div class="relative w-full max-w-3xl mx-auto mb-10">
-                    <input type="text" placeholder="Search courses or videos..." class="w-full pl-12 pr-4 py-3 rounded-xl bg-white dark:bg-[#1f2937] border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#63b3ed] text-base shadow-sm">
+                    <input type="text" placeholder="Search courses or videos..." class="w-full pl-12 pr-12 py-3 rounded-xl bg-white dark:bg-[#1f2937] border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#63b3ed] text-base shadow-sm">
                     <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                    <button id="voice-search-btn" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#63b3ed] transition-colors">
+                        <i data-lucide="mic" class="w-5 h-5"></i>
+                    </button>
                 </div>
                 
                 <div class="w-full mb-10">
@@ -108,6 +293,7 @@
                 
                 <div id="filter-buttons" class="flex items-center justify-center gap-2 mb-10 flex-wrap">
                     <button data-filter="all" class="filter-btn filter-all active px-4 py-2 text-sm font-semibold rounded-full border border-transparent">All</button>
+                    <button data-filter="general" class="filter-btn filter-general px-4 py-2 text-sm font-semibold rounded-full border border-transparent hover:bg-gray-200 dark:hover:bg-gray-700">General</button>
                     <button data-filter="designers" class="filter-btn filter-designers px-4 py-2 text-sm font-semibold rounded-full border border-transparent hover:bg-gray-200 dark:hover:bg-gray-700">Designers</button>
                     <button data-filter="developers" class="filter-btn filter-developers px-4 py-2 text-sm font-semibold rounded-full border border-transparent hover:bg-gray-200 dark:hover:bg-gray-700">Developers</button>
                     <button data-filter="managers" class="filter-btn filter-managers px-4 py-2 text-sm font-semibold rounded-full border border-transparent hover:bg-gray-200 dark:hover:bg-gray-700">Managers</button>
@@ -117,63 +303,852 @@
                 
                 <div id="video-content" class="space-y-12">
                     
+                    <section class="department-section" data-category="general">
+                        <h2 class="text-2xl font-bold mb-4">General</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">15:00</div></div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 flex-shrink-0">GA</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Welcome to Game Academy</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Admin Team</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">An overview of the platform, its features, and how to get started on your learning journey.</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-general px-2 py-1 text-xs rounded-md">#Onboarding</span><span class="tag tag-general px-2 py-1 text-xs rounded-md">#General</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">1.2M views • 1 year ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">08:20</div></div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 flex-shrink-0">HR</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Company Culture and Values</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">HR Department</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Learn about our company's mission, vision, and the core values that guide our work.</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-general px-2 py-1 text-xs rounded-md">#Culture</span><span class="tag tag-general px-2 py-1 text-xs rounded-md">#Values</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">50k views • 6 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">12:30</div></div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 flex-shrink-0">IT</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">IT Security Best Practices</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">IT Department</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A guide to keeping your data and our company's information safe and secure.</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-general px-2 py-1 text-xs rounded-md">#Security</span><span class="tag tag-general px-2 py-1 text-xs rounded-md">#IT</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">22k views • 2 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
                     <section class="department-section" data-category="designers">
                         <h2 class="text-2xl font-bold mb-4">Designers</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="Mastering_Notebook_LM.jpg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center font-bold text-purple-700 dark:text-purple-400 flex-shrink-0">LW</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Mastering Notebook LM</h3><p class="text-sm text-gray-500 dark:text-gray-400">Laura Wilson</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Unlock the full potential of Notebook LM in this comprehensive guide for designers and researchers...</p><div class="mt-2 space-x-2"><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#NotebookLM</span><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#Design</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">112k views • 3 days ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="Discord_Guide.jpg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">22:15</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center font-bold text-indigo-700 dark:text-indigo-400 flex-shrink-0">AM</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Discord Guide: Onboarding</h3><p class="text-sm text-gray-500 dark:text-gray-400">Anna Miller</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A complete guide to onboarding new members to your Discord server, focusing on user experience design...</p><div class="mt-2 space-x-2"><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#Discord</span><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#UX</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">55k views • 2 months ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">07:30</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center font-bold text-purple-700 dark:text-purple-400 flex-shrink-0">DA</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Figma Basics for UI/UX</h3><p class="text-sm text-gray-500 dark:text-gray-400">Diana Art</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Start your design journey with Figma. This tutorial covers all the basics you need to create stunning UI/UX designs...</p><div class="mt-2 space-x-2"><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#Figma</span><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#UIUX</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">250k views • 8 months ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">10:00</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center font-bold text-purple-700 dark:text-purple-400 flex-shrink-0">PD</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Advanced Photoshop Techniques</h3><p class="text-sm text-gray-500 dark:text-gray-400">Pro Designs</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Take your Photoshop skills to the next level with these advanced techniques for photo manipulation and graphic design...</p><div class="mt-2 space-x-2"><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#Photoshop</span><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#Design</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">89k views • 4 months ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center font-bold text-purple-700 dark:text-purple-400 flex-shrink-0">CD</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Canva for Social Media Graphics</h3><p class="text-sm text-gray-500 dark:text-gray-400">Creative Designs</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Learn to create stunning social media graphics quickly and easily with Canva. Perfect for beginners and non-designers...</p><div class="mt-2 space-x-2"><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#Canva</span><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#SocialMedia</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">1.5M views • 1 year ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">21:18</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center font-bold text-purple-700 dark:text-purple-400 flex-shrink-0">UX</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">User Journey Mapping Explained</h3><p class="text-sm text-gray-500 dark:text-gray-400">UX Masters</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A deep dive into user journey mapping, a critical tool for any UX designer to understand and improve the user experience...</p><div class="mt-2 space-x-2"><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#UX</span><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#UserJourney</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">45k views • 2 months ago</p></div></div></a></div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="Mastering_Notebook_LM.jpg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center font-bold text-purple-700 dark:text-purple-400 flex-shrink-0">LW</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Mastering Notebook LM</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Laura Wilson</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Unlock the full potential of Notebook LM in this comprehensive guide for designers and researchers...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#NotebookLM</span><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#Design</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">112k views • 3 days ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="Discord_Guide.jpg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">22:15</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center font-bold text-indigo-700 dark:text-indigo-400 flex-shrink-0">AM</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Discord Guide: Onboarding</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Anna Miller</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A complete guide to onboarding new members to your Discord server, focusing on user experience design...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#Discord</span><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#UX</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">55k views • 2 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">07:30</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center font-bold text-purple-700 dark:text-purple-400 flex-shrink-0">DA</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Figma Basics for UI/UX</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Diana Art</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Start your design journey with Figma. This tutorial covers all the basics you need to create stunning UI/UX designs...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#Figma</span><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#UIUX</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">250k views • 8 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">10:00</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center font-bold text-purple-700 dark:text-purple-400 flex-shrink-0">PD</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Advanced Photoshop Techniques</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Pro Designs</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Take your Photoshop skills to the next level with these advanced techniques for photo manipulation and graphic design...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#Photoshop</span><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#Design</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">89k views • 4 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center font-bold text-purple-700 dark:text-purple-400 flex-shrink-0">CD</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Canva for Social Media Graphics</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Creative Designs</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Learn to create stunning social media graphics quickly and easily with Canva. Perfect for beginners and non-designers...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#Canva</span><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#SocialMedia</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">1.5M views • 1 year ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">21:18</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center font-bold text-purple-700 dark:text-purple-400 flex-shrink-0">UX</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">User Journey Mapping Explained</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">UX Masters</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A deep dive into user journey mapping, a critical tool for any UX designer to understand and improve the user experience...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#UX</span><span class="tag tag-designers px-2 py-1 text-xs rounded-md">#UserJourney</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">45k views • 2 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </section>
                     
                     <section class="department-section" data-category="developers">
                         <h2 class="text-2xl font-bold mb-4">Developers</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="VS_Code_Launchpad.jpg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center font-bold text-green-700 dark:text-green-400 flex-shrink-0">DB</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">VS Code Launchpad</h3><p class="text-sm text-gray-500 dark:text-gray-400">David Brown</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Get ready to supercharge your coding workflow with the VS Code Launchpad. We cover essential extensions, shortcuts...</p><div class="mt-2 space-x-2"><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#VSCode</span><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#Coding</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">25k views • 1 month ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">19:40</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center font-bold text-green-700 dark:text-green-400 flex-shrink-0">JS</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Introduction to Git</h3><p class="text-sm text-gray-500 dark:text-gray-400">John Smith</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">This is the perfect starting point for anyone new to version control. Learn the basic commands you need to start using Git...</p><div class="mt-2 space-x-2"><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#Git</span><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#Programming</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">101k views • 4 months ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center font-bold text-green-700 dark:text-green-400 flex-shrink-0">TC</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Advanced Git Commands</h3><p class="text-sm text-gray-500 dark:text-gray-400">Tech Coder</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Take your Git skills to the next level. This video covers rebasing, cherry-picking, and other advanced commands...</p><div class="mt-2 space-x-2"><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#Git</span><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#Advanced</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">85k views • 4 months ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="All-in-One_Tech_Setup.jpg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-teal-500/20 flex items-center justify-center font-bold text-teal-700 dark:text-teal-400 flex-shrink-0">EW</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">All-in-One Tech Setup & Troubleshooting Guide</h3><p class="text-sm text-gray-500 dark:text-gray-400">Emily White</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">This guide covers everything you need for a complete tech setup. We also include a troubleshooting section for common issues...</p><div class="mt-2 space-x-2"><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#Tech</span><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#Setup</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">1.1M views • 1 year ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">28:30</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center font-bold text-green-700 dark:text-green-400 flex-shrink-0">RD</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">React Hooks in 30 Minutes</h3><p class="text-sm text-gray-500 dark:text-gray-400">React Devs</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A quick and concise introduction to React Hooks. Learn useState, useEffect, and useContext in under 30 minutes...</p><div class="mt-2 space-x-2"><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#React</span><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#JavaScript</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">88k views • 2 months ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center font-bold text-green-700 dark:text-green-400 flex-shrink-0">CC</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Docker for Absolute Beginners</h3><p class="text-sm text-gray-500 dark:text-gray-400">Code Camp</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">This course will teach you the basics of Docker. Learn how to create and manage containers for your applications...</p><div class="mt-2 space-x-2"><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#Docker</span><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#DevOps</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">1.9M views • 10 months ago</p></div></div></a></div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="VS_Code_Launchpad.jpg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center font-bold text-green-700 dark:text-green-400 flex-shrink-0">DB</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">VS Code Launchpad</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">David Brown</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Get ready to supercharge your coding workflow with the VS Code Launchpad. We cover essential extensions, shortcuts...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#VSCode</span><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#Coding</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">25k views • 1 month ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">19:40</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center font-bold text-green-700 dark:text-green-400 flex-shrink-0">JS</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Introduction to Git</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">John Smith</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">This is the perfect starting point for anyone new to version control. Learn the basic commands you need to start using Git...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#Git</span><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#Programming</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">101k views • 4 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center font-bold text-green-700 dark:text-green-400 flex-shrink-0">TC</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Advanced Git Commands</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Tech Coder</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Take your Git skills to the next level. This video covers rebasing, cherry-picking, and other advanced commands...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#Git</span><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#Advanced</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">85k views • 4 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="All-in-One_Tech_Setup.jpg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-teal-500/20 flex items-center justify-center font-bold text-teal-700 dark:text-teal-400 flex-shrink-0">EW</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">All-in-One Tech Setup & Troubleshooting Guide</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Emily White</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">This guide covers everything you need for a complete tech setup. We also include a troubleshooting section for common issues...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#Tech</span><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#Setup</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">1.1M views • 1 year ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">28:30</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center font-bold text-green-700 dark:text-green-400 flex-shrink-0">RD</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">React Hooks in 30 Minutes</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">React Devs</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A quick and concise introduction to React Hooks. Learn useState, useEffect, and useContext in under 30 minutes...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#React</span><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#JavaScript</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">88k views • 2 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center font-bold text-green-700 dark:text-green-400 flex-shrink-0">CC</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Docker for Absolute Beginners</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Code Camp</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">This course will teach you the basics of Docker. Learn how to create and manage containers for your applications...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#Docker</span><span class="tag tag-developers px-2 py-1 text-xs rounded-md">#DevOps</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">1.9M views • 10 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </section>
 
                     <section class="department-section" data-category="managers">
                         <h2 class="text-2xl font-bold mb-4">Managers</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="CRM_Onboarding.jpg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">05:45</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center font-bold text-pink-700 dark:text-pink-400 flex-shrink-0">SC</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">CRM Onboarding: From Login to Reports</h3><p class="text-sm text-gray-500 dark:text-gray-400">Sarah Chen</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A quick and easy guide to get started with our CRM. From the very first login to creating your own custom reports...</p><div class="mt-2 space-x-2"><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#CRM</span><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Onboarding</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">8k views • 5 days ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center font-bold text-orange-700 dark:text-orange-400 flex-shrink-0">SC</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Working with Dropbox Paper</h3><p class="text-sm text-gray-500 dark:text-gray-400">Sam Carter</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Learn how to collaborate effectively using Dropbox Paper. This video covers document creation, sharing, and team management...</p><div class="mt-2 space-x-2"><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Dropbox</span><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Collaboration</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">43k views • 6 days ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center font-bold text-red-700 dark:text-red-400 flex-shrink-0">CT</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Advanced Security Settings</h3><p class="text-sm text-gray-500 dark:text-gray-400">Course Team</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Protect your accounts with our guide to advanced security settings. We cover 2FA, password managers, and more...</p><div class="mt-2 space-x-2"><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Security</span><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Privacy</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">12k views • 1 month ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">11:20</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center font-bold text-orange-700 dark:text-orange-400 flex-shrink-0">AM</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Agile Project Management</h3><p class="text-sm text-gray-500 dark:text-gray-400">Agile Masters</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">An introduction to Agile and Scrum methodologies for effective project management and team leadership...</p><div class="mt-2 space-x-2"><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Agile</span><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#PM</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">150k views • 9 months ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">14:50</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center font-bold text-red-700 dark:text-red-400 flex-shrink-0">LT</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Leading a Team Remotely</h3><p class="text-sm text-gray-500 dark:text-gray-400">Leadership Team</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Learn essential strategies for managing and leading a team effectively in a remote or hybrid work environment...</p><div class="mt-2 space-x-2"><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Leadership</span><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#RemoteWork</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">33k views • 3 months ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">09:15</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center font-bold text-pink-700 dark:text-pink-400 flex-shrink-0">FP</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Financial Planning Basics for Managers</h3><p class="text-sm text-gray-500 dark:text-gray-400">Finance Pros</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A manager's guide to the basics of financial planning, budgeting, and resource allocation for their teams...</p><div class="mt-2 space-x-2"><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Finance</span><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Management</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">18k views • 7 months ago</p></div></div></a></div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="CRM_Onboarding.jpg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">05:45</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center font-bold text-pink-700 dark:text-pink-400 flex-shrink-0">SC</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">CRM Onboarding: From Login to Reports</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Sarah Chen</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A quick and easy guide to get started with our CRM. From the very first login to creating your own custom reports...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#CRM</span><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Onboarding</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">8k views • 5 days ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center font-bold text-orange-700 dark:text-orange-400 flex-shrink-0">SC</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Working with Dropbox Paper</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Sam Carter</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Learn how to collaborate effectively using Dropbox Paper. This video covers document creation, sharing, and team management...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Dropbox</span><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Collaboration</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">43k views • 6 days ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center font-bold text-red-700 dark:text-red-400 flex-shrink-0">CT</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Advanced Security Settings</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Course Team</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Protect your accounts with our guide to advanced security settings. We cover 2FA, password managers, and more...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Security</span><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Privacy</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">12k views • 1 month ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">11:20</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center font-bold text-orange-700 dark:text-orange-400 flex-shrink-0">AM</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Agile Project Management</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Agile Masters</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">An introduction to Agile and Scrum methodologies for effective project management and team leadership...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Agile</span><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#PM</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">150k views • 9 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">14:50</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center font-bold text-red-700 dark:text-red-400 flex-shrink-0">LT</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Leading a Team Remotely</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Leadership Team</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Learn essential strategies for managing and leading a team effectively in a remote or hybrid work environment...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Leadership</span><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#RemoteWork</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">33k views • 3 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">09:15</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center font-bold text-pink-700 dark:text-pink-400 flex-shrink-0">FP</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Financial Planning Basics for Managers</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Finance Pros</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A manager's guide to the basics of financial planning, budgeting, and resource allocation for their teams...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Finance</span><span class="tag tag-managers px-2 py-1 text-xs rounded-md">#Management</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">18k views • 7 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </section>
                     
                     <section class="department-section" data-category="marketers">
                         <h2 class="text-2xl font-bold mb-4">Marketers</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                             <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-[#ed8936]/20 flex items-center justify-center font-bold text-[#dd6b20] dark:text-[#FE9D29] flex-shrink-0">JS</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Learn 80% of Perplexity in under 10 minutes!</h3><p class="text-sm text-gray-500 dark:text-gray-400">Jeff Su</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">This video is a deep dive into the core functionalities of Perplexity, a key tool for modern market research...</p><div class="mt-2 space-x-2"><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Perplexity</span><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#AI</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">1.4M views • 2 weeks ago</p></div></div></a></div>
-                             <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="Google_Chrome.jpg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">12:02</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center font-bold text-red-700 dark:text-red-400 flex-shrink-0">MJ</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Google Chrome: The Complete Guide</h3><p class="text-sm text-gray-500 dark:text-gray-400">Mike Johnson</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Become a Google Chrome power user with this complete guide. We cover everything for marketers...</p><div class="mt-2 space-x-2"><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Chrome</span><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Browser</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">98k views • 1 day ago</p></div></div></a></div>
-                             <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">13:25</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center font-bold text-pink-700 dark:text-pink-400 flex-shrink-0">MK</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">SEO Keyword Research in 2025</h3><p class="text-sm text-gray-500 dark:text-gray-400">Mark Knight</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Get ahead of the curve with our guide to SEO keyword research for 2025. Learn the strategies that will rank your site higher...</p><div class="mt-2 space-x-2"><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#SEO</span><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Marketing</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">18k views • 3 weeks ago</p></div></div></a></div>
-                             <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">16:40</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center font-bold text-pink-700 dark:text-pink-400 flex-shrink-0">SM</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Social Media Strategy</h3><p class="text-sm text-gray-500 dark:text-gray-400">Social Masters</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Develop a winning social media strategy for your brand. This guide covers content planning, audience engagement, and analytics...</p><div class="mt-2 space-x-2"><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#SocialMedia</span><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Strategy</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">210k views • 5 months ago</p></div></div></a></div>
-                             <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-[#ed8936]/20 flex items-center justify-center font-bold text-[#dd6b20] dark:text-[#FE9D29] flex-shrink-0">CM</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Content Marketing 101</h3><p class="text-sm text-gray-500 dark:text-gray-400">Content Minds</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Learn the fundamentals of content marketing. From creating a content calendar to writing compelling blog posts...</p><div class="mt-2 space-x-2"><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Content</span><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Marketing</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">95k views • 2 months ago</p></div></div></a></div>
-                             <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">25:00</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center font-bold text-red-700 dark:text-red-400 flex-shrink-0">GA</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Google Analytics Explained</h3><p class="text-sm text-gray-500 dark:text-gray-400">GA Experts</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A complete beginner's guide to Google Analytics. Learn how to track website traffic and understand your audience...</p><div class="mt-2 space-x-2"><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Analytics</span><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Google</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">300k views • 11 months ago</p></div></div></a></div>
+                             <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-[#ed8936]/20 flex items-center justify-center font-bold text-[#dd6b20] dark:text-[#FE9D29] flex-shrink-0">JS</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Learn 80% of Perplexity in under 10 minutes!</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Jeff Su</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">This video is a deep dive into the core functionalities of Perplexity, a key tool for modern market research...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Perplexity</span><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#AI</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">1.4M views • 2 weeks ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="Google_Chrome.jpg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">12:02</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center font-bold text-red-700 dark:text-red-400 flex-shrink-0">MJ</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Google Chrome: The Complete Guide</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Mike Johnson</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Become a Google Chrome power user with this complete guide. We cover everything for marketers...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Chrome</span><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Browser</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">98k views • 1 day ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">13:25</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center font-bold text-pink-700 dark:text-pink-400 flex-shrink-0">MK</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">SEO Keyword Research in 2025</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Mark Knight</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Get ahead of the curve with our guide to SEO keyword research for 2025. Learn the strategies that will rank your site higher...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#SEO</span><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Marketing</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">18k views • 3 weeks ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">16:40</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center font-bold text-pink-700 dark:text-pink-400 flex-shrink-0">SM</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Social Media Strategy</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Social Masters</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Develop a winning social media strategy for your brand. This guide covers content planning, audience engagement, and analytics...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#SocialMedia</span><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Strategy</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">210k views • 5 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-[#ed8936]/20 flex items-center justify-center font-bold text-[#dd6b20] dark:text-[#FE9D29] flex-shrink-0">CM</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Content Marketing 101</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Content Minds</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Learn the fundamentals of content marketing. From creating a content calendar to writing compelling blog posts...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Content</span><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Marketing</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">95k views • 2 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">25:00</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center font-bold text-red-700 dark:text-red-400 flex-shrink-0">GA</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Google Analytics Explained</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">GA Experts</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A complete beginner's guide to Google Analytics. Learn how to track website traffic and understand your audience...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Analytics</span><span class="tag tag-marketers px-2 py-1 text-xs rounded-md">#Google</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">300k views • 11 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </section>
                     
                     <section class="department-section" data-category="videographers">
                         <h2 class="text-2xl font-bold mb-4">Videographers</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="AI-Driven_MCP_Service.jpg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">08:55</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 flex-shrink-0">EM</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Editing Cinematic Shorts in CapCut</h3><p class="text-sm text-gray-500 dark:text-gray-400">Eva Moreno</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A beginner's guide to editing cinematic shorts in CapCut. We'll cover everything from importing clips to color grading...</p><div class="mt-2 space-x-2"><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#CapCut</span><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#VideoEditing</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">1.2k views • 2 weeks ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">18:30</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 flex-shrink-0">VG</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Advanced Color Grading</h3><p class="text-sm text-gray-500 dark:text-gray-400">Video Geeks</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Take your video quality to the next level with these advanced color grading techniques...</p><div class="mt-2 space-x-2"><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#ColorGrading</span><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#Filmmaking</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">45k views • 3 months ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">12:00</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 flex-shrink-0">FS</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Shooting Cinematic B-Roll</h3><p class="text-sm text-gray-500 dark:text-gray-400">Film School</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Learn the art of shooting compelling B-roll that will make your videos stand out. We cover composition, camera movement...</p><div class="mt-2 space-x-2"><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#BRoll</span><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#Cinematic</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">120k views • 8 months ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">22:15</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 flex-shrink-0">AV</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Audio for Video Guide</h3><p class="text-sm text-gray-500 dark:text-gray-400">Audio Video Pro</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A comprehensive guide to capturing high-quality audio for your videos. We cover microphones, recorders, and techniques...</p><div class="mt-2 space-x-2"><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#Audio</span><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#Sound</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">88k views • 1 year ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 flex-shrink-0">AE</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">After Effects Basics</h3><p class="text-sm text-gray-500 dark:text-gray-400">AE Tutors</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Learn the fundamentals of Adobe After Effects for motion graphics and visual effects. This is a beginner friendly course...</p><div class="mt-2 space-x-2"><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#AfterEffects</span><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#VFX</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">450k views • 10 months ago</p></div></div></a></div>
-                            <div class="group video-card"><a href="#"><div class="relative aspect-video rounded-xl overflow-hidden shadow-lg mb-3"><img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"><video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video><div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">13:55</div></div><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 flex-shrink-0">LS</div><div class="flex-1"><h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed]">Lighting Your Scene on a Budget</h3><p class="text-sm text-gray-500 dark:text-gray-400">Lighting School</p><p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">You don't need expensive gear to create beautiful lighting. This tutorial shows you how to light your scenes on a budget...</p><div class="mt-2 space-x-2"><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#Lighting</span><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#Budget</span></div><p class="text-xs text-gray-500 dark:text-gray-400 mt-2">99k views • 6 months ago</p></div></div></a></div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="AI-Driven_MCP_Service.jpg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">08:55</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 flex-shrink-0">EM</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Editing Cinematic Shorts in CapCut</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Eva Moreno</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A beginner's guide to editing cinematic shorts in CapCut. We'll cover everything from importing clips to color grading...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#CapCut</span><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#VideoEditing</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">1.2k views • 2 weeks ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">18:30</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 flex-shrink-0">VG</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Advanced Color Grading</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Video Geeks</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Take your video quality to the next level with these advanced color grading techniques...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#ColorGrading</span><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#Filmmaking</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">45k views • 3 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">12:00</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 flex-shrink-0">FS</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Shooting Cinematic B-Roll</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Film School</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Learn the art of shooting compelling B-roll that will make your videos stand out. We cover composition, camera movement...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#BRoll</span><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#Cinematic</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">120k views • 8 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">22:15</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 flex-shrink-0">AV</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Audio for Video Guide</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Audio Video Pro</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">A comprehensive guide to capturing high-quality audio for your videos. We cover microphones, recorders, and techniques...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#Audio</span><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#Sound</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">88k views • 1 year ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div title="This is a course" class="absolute bottom-2 right-2 bg-black/60 text-white p-1 rounded"><i data-lucide="layers" class="w-4 h-4"></i></div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 flex-shrink-0">AE</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">After Effects Basics</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">AE Tutors</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">Learn the fundamentals of Adobe After Effects for motion graphics and visual effects. This is a beginner friendly course...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#AfterEffects</span><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#VFX</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">450k views • 10 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group video-card">
+                                <a href="#" class="block mb-3">
+                                    <div class="relative aspect-video rounded-xl overflow-hidden shadow-lg">
+                                        <img src="thumb.jpeg" alt="Video thumbnail" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300">
+                                        <video src="video_main.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"></video>
+                                        <div class="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded font-semibold">13:55</div>
+                                    </div>
+                                </a>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 flex-shrink-0">LS</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <h3 class="font-bold leading-snug group-hover:text-[#4299e1] dark:group-hover:text-[#63b3ed] pr-2">Lighting Your Scene on a Budget</h3>
+                                            <div class="relative flex-shrink-0">
+                                                <button class="three-dot-menu-button p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                                                <div class="video-menu absolute right-0 mt-2 w-56 bg-white dark:bg-[#1f2937] text-gray-700 dark:text-gray-200 rounded-lg shadow-lg hidden z-30"><ul class="py-2 text-sm"><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="list-plus" class="w-4 h-4 mr-3"></i> Add to queue</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="clock" class="w-4 h-4 mr-3"></i> Save to Watch Later</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="folder-plus" class="w-4 h-4 mr-3"></i> Save to playlist</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="download" class="w-4 h-4 mr-3"></i> Download</a></li><li><a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><i data-lucide="share-2" class="w-4 h-4 mr-3"></i> Share</a></li></ul></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Lighting School</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 text-ellipsis overflow-hidden h-10">You don't need expensive gear to create beautiful lighting. This tutorial shows you how to light your scenes on a budget...</p>
+                                        <div class="mt-2 space-x-2"><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#Lighting</span><span class="tag tag-videographers px-2 py-1 text-xs rounded-md">#Budget</span></div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">99k views • 6 months ago</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </section>
 
@@ -182,33 +1157,92 @@
         </main>
     </div>
 
+    <div id="voice-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white dark:bg-[#1f2937] rounded-2xl p-8 w-full max-w-2xl relative shadow-2xl flex flex-col">
+            <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h2 class="text-2xl font-semibold text-left text-gray-800 dark:text-gray-200 mb-6">Speak...</h2>
+            <div class="flex items-center gap-6 mb-8">
+                <div class="voice-wave h-16 flex-1">
+                    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div class="flex-shrink-0">
+                    <div class="w-24 h-24 bg-blue-500/10 dark:bg-blue-500/20 rounded-full flex items-center justify-center animate-pulse">
+                        <i data-lucide="mic" class="w-10 h-10 text-blue-500"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full">
+                 <p id="transcribed-text" class="text-left text-gray-700 dark:text-gray-300 text-lg min-h-[56px] break-words">Listening...</p>
+            </div>
+        </div>
+    </div>
+
     <script>
         lucide.createIcons();
         
-        // --- Theme Toggle ---
-        const themeToggle = document.getElementById('theme-toggle');
-        const htmlEl = document.documentElement;
-        if (localStorage.getItem('theme') === 'dark') {
-          htmlEl.classList.add('dark');
-        }
-        themeToggle.addEventListener('click', () => {
-            htmlEl.classList.toggle('dark');
-            localStorage.setItem('theme', htmlEl.classList.contains('dark') ? 'dark' : 'light');
-        });
-
         document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Sidebar Logic ---
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const mainContent = document.getElementById('main-content');
+            const toggleIcon = sidebarToggle.querySelector('i');
+
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                if (sidebar.classList.contains('collapsed')) {
+                    mainContent.style.marginLeft = '5rem';
+                    toggleIcon.setAttribute('data-lucide', 'chevron-right');
+                } else {
+                    mainContent.style.marginLeft = '16rem';
+                    toggleIcon.setAttribute('data-lucide', 'chevron-left');
+                }
+                lucide.createIcons(); // Re-render icons after changing
+            });
+            
+            // --- Theme Toggle ---
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const themeLabel = themeToggle.querySelector('.sidebar-label');
+            const htmlEl = document.documentElement;
+
+            // Set initial theme based on localStorage
+            function updateTheme(isDark) {
+                if(isDark){
+                    htmlEl.classList.add('dark');
+                    themeIcon.setAttribute('data-lucide', 'sun');
+                    if(themeLabel) themeLabel.textContent = 'Light Mode';
+                } else {
+                    htmlEl.classList.remove('dark');
+                    themeIcon.setAttribute('data-lucide', 'moon');
+                    if(themeLabel) themeLabel.textContent = 'Dark Mode';
+                }
+                lucide.createIcons();
+            }
+
+            const isSavedThemeDark = localStorage.getItem('theme') === 'dark';
+            updateTheme(isSavedThemeDark);
+
+            themeToggle.addEventListener('click', () => {
+                const isDark = htmlEl.classList.toggle('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                updateTheme(isDark);
+            });
+
             // --- Video Hover Logic ---
-            const allVideoCardsForHover = document.querySelectorAll('.video-card');
-            allVideoCardsForHover.forEach(card => {
-                const video = card.querySelector('video');
+            const allVideoCardsForHover = document.querySelectorAll('.video-card a');
+            allVideoCardsForHover.forEach(cardLink => {
+                const video = cardLink.querySelector('video');
                 if (!video) return;
-                card.addEventListener('mouseenter', () => {
+                cardLink.addEventListener('mouseenter', () => {
                     const playPromise = video.play();
                     if (playPromise !== undefined) {
                         playPromise.catch(error => {});
                     }
                 });
-                card.addEventListener('mouseleave', () => {
+                cardLink.addEventListener('mouseleave', () => {
                     video.pause();
                     video.currentTime = 0;
                 });
@@ -238,6 +1272,74 @@
                     button.classList.add('active');
                     button.classList.remove('hover:bg-gray-200', 'dark:hover:bg-gray-700');
                 });
+            });
+
+            // --- 3-Dot Menu Logic ---
+            document.querySelectorAll('.three-dot-menu-button').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const menu = button.nextElementSibling;
+                    const isHidden = menu.classList.contains('hidden');
+                    
+                    document.querySelectorAll('.video-menu').forEach(m => {
+                        if (m !== menu) {
+                           m.classList.add('hidden');
+                        }
+                    });
+
+                    menu.classList.toggle('hidden');
+                });
+            });
+
+            // --- Voice Search Modal Logic ---
+            const voiceSearchBtn = document.getElementById('voice-search-btn');
+            const voiceModal = document.getElementById('voice-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const transcribedText = document.getElementById('transcribed-text');
+
+            voiceSearchBtn.addEventListener('click', () => {
+                voiceModal.classList.remove('hidden');
+                transcribedText.textContent = "Listening...";
+                // Simulate long transcription
+                setTimeout(() => {
+                    transcribedText.textContent = "How to create a video game from scratch using Unreal Engine 5 for absolute beginners.";
+                }, 2500);
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                voiceModal.classList.add('hidden');
+            });
+            
+            voiceModal.addEventListener('click', (event) => {
+                if (event.target === voiceModal) {
+                    voiceModal.classList.add('hidden');
+                }
+            });
+
+            // --- Notifications Panel Logic ---
+            const notificationsBtn = document.getElementById('notifications-btn');
+            const notificationsPanel = document.getElementById('notifications-panel');
+
+            notificationsBtn.addEventListener('click', (event) => {
+                event.stopPropagation();
+                // Hide any open 3-dot menus
+                document.querySelectorAll('.video-menu').forEach(m => m.classList.add('hidden'));
+                notificationsPanel.classList.toggle('hidden');
+            });
+
+
+            // --- General Close Listeners ---
+            window.addEventListener('click', (event) => {
+                 if (!event.target.closest('.three-dot-menu-button')) {
+                    document.querySelectorAll('.video-menu').forEach(menu => {
+                        menu.classList.add('hidden');
+                    });
+                 }
+                 if (!event.target.closest('#notifications-btn-container')) {
+                    notificationsPanel.classList.add('hidden');
+                 }
             });
         });
     </script>
